@@ -11,6 +11,9 @@
   <title>Rekrea – Construyendo Infancias Presentes</title>
 
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <img src="tu-logo.png" onclick="mostrarInicio()" style="cursor: pointer;"> 
 
   <style>
 #manifiesto h2,
@@ -37,13 +40,11 @@
 
 <div id="experienciaModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[999] hidden">
   <div class="bg-white rounded-3xl max-w-xl w-full mx-4 p-8 relative shadow-2xl">
-
     <button id="cerrarModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">✕</button>
 
     <div id="paso1" class="space-y-6 text-center">
       <h3 class="text-3xl font-semibold font-serif">Crea tu propia experiencia</h3>
       <p class="text-gray-500">¿A quién va dirigida?</p>
-
       <div class="grid gap-4">
         <button data-publico="nino" class="btn-exp">Niño / Niña</button>
         <button data-publico="adolescente" class="btn-exp">Adolescente</button>
@@ -52,6 +53,70 @@
       </div>
     </div>
 
+    <div id="paso2" class="space-y-6 text-center hidden">
+      <h3 class="text-3xl font-semibold font-serif">¿Qué necesitas hoy?</h3>
+      <div class="grid gap-4">
+        <button data-objetivo="conectar" class="btn-exp">Conectar en el hoy</button>
+        <button data-objetivo="estres" class="btn-exp">Bajar el estrés</button>
+        <button data-objetivo="calidad" class="btn-exp">Pasar tiempo de calidad</button>
+        <button data-objetivo="creatividad" class="btn-exp">Estimular la creatividad</button>
+      </div>
+      <button id="volverPaso1" class="text-sm text-gray-400 hover:text-gray-600">← Regresar</button>
+    </div>
+
+    <div id="resultado" class="space-y-6 text-center hidden">
+      <h3 class="text-3xl font-semibold font-serif">Recomendación para hoy</h3>
+      <p id="resultadoTexto" class="text-gray-600 leading-relaxed"></p>
+      <div class="flex justify-center gap-4 pt-4">
+       <button id="reiniciar" class="bg-gray-100 px-6 py-3 rounded-full font-semibold">← Volver</button>
+        <button id="cerrarFinal" class="bg-[#F4A261] text-white px-6 py-3 rounded-full font-semibold">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="planificadorModal" class="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-[1000] hidden">
+  <div class="bg-white rounded-[2.5rem] max-w-2xl w-full mx-4 p-8 relative shadow-2xl overflow-y-auto max-h-[90vh]">
+    <button id="cerrarPlanificador" class="absolute top-6 right-6 text-gray-400 hover:text-gray-600">✕</button>
+
+    <div id="plan-paso1" class="space-y-6">
+      <div class="text-center">
+        <h3 class="text-3xl font-serif font-semibold">Marzo 2026</h3>
+        <p class="text-gray-500">Selecciona un día para tu momento Rekrea</p>
+      </div>
+      <div class="grid grid-cols-7 gap-2 text-center text-sm font-bold border-b pb-2 text-[#264653]">
+        <span>Do</span><span>Lu</span><span>Ma</span><span>Mi</span><span>Ju</span><span>Vi</span><span>Sá</span>
+      </div>
+      <div id="calendarioGrid" class="grid grid-cols-7 gap-2">
+        </div>
+    </div>
+
+    <div id="plan-paso2" class="space-y-6 hidden">
+      <h3 class="text-2xl font-serif text-center text-[#264653]">¿Qué actividad prefieres?</h3>
+      <div id="listaActividades" class="grid gap-3 max-h-[400px] overflow-y-auto pr-2">
+        </div>
+      <a href="https://static1.squarespace.com/static/611a88fb90c48074b99a267a/t/68eb9cdaf5608a4a275aaff1/1760271578067/2025+100+screen+free+activities+for+kids+boredom+busters+SPAN+Tech+Tip+4.pdf" target="_blank" class="block text-center text-[#F4A261] font-bold border-2 border-[#264653] py-3 rounded-xl hover:bg-[#264653] hover:text-white transition-all">
+  Ver más en la guía completa
+</a>
+    </div>
+
+    <div id="plan-paso3" class="space-y-6 text-center hidden">
+      <div class="bg-green-50 p-6 rounded-3xl">
+        <span class="material-symbols-outlined text-5xl text-green-500 mb-4">check_circle</span>
+        <h3 class="text-2xl font-serif font-bold text-[#264653]">¡Plan Listado!</h3>
+        <p id="resumenPlan" class="text-gray-600 mt-2"></p>
+      </div>
+      <div class="space-y-4">
+        <p class="font-medium text-[#264653]">¿Te mandamos un recordatorio?</p>
+        <div class="flex gap-4">
+          <button class="flex-1 bg-[#F4A261] text-white py-3 rounded-full font-bold shadow-md hover:bg-[#e6914d]" onclick="alert('¡Recordatorio activado!')">Sí, avisar</button>
+          <button class="flex-1 bg-gray-100 py-3 rounded-full font-bold hover:bg-gray-200" onclick="cerrarPlanModal()">No, gracias</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
     <!-- PASO 2 -->
     <div id="paso2" class="space-y-6 text-center hidden">
       <h3 class="text-3xl font-semibold font-serif">¿Qué necesitas hoy?</h3>
@@ -83,24 +148,26 @@
 <header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
   <div class="max-w-[1200px] mx-auto px-6 py-4 flex items-center justify-between">
     <div class="flex items-center gap-2">
-      <h1 id="logoHeader" class="text-4xl text-[#264653] ">Rekrea
+      <h1 id="logoHeader" class="text-4xl text-[#264653] cursor-pointer" onclick="document.querySelectorAll('#contenedor-principal > section, #contenedor-principal > div').forEach(s => s.style.display = ''); window.scrollTo({top: 0, behavior: 'instant'});">Rekrea
       </h1>
     </div>
     
-    <nav class="hidden md:flex items-center gap-10">
-      <a class="text-sm font-medium text-gray-600 hover:text-[#F4A261] transition-colors" href="#inicio">Inicio</a>
-      <a class="text-sm font-medium text-gray-600 hover:text-[#F4A261] transition-colors" href="#por-que">¿Por qué?</a>
-      <a class="text-sm font-medium text-gray-600 hover:text-[#F4A261] transition-colors" href="#herramientas">Herramientas</a>
-      <a class="text-sm font-medium text-gray-600 hover:text-[#F4A261] transition-colors" href="#beneficios">Beneficios</a>
-    </nav>
+  <nav class="hidden md:flex items-center gap-10">
+  <a class="text-sm font-medium text-gray-600 hover:text-[#F4A261] transition-colors" href="javascript:void(0)" onclick="document.querySelectorAll('#contenedor-principal > section, #contenedor-principal > div').forEach(s => s.style.display = ''); window.scrollTo({top: 0, behavior: 'instant'});">Inicio</a>
+  <a class="text-sm font-medium text-gray-600 hover:text-[#F4A261] transition-colors" 
+   href="javascript:void(0)" 
+   onclick="mostrarSoloFraseProposito()">Nuestro proposito</a> 
+  <a class="text-sm font-medium text-gray-600 hover:text-[#F4A261] transition-colors cursor-pointer" onclick="mostrarSoloHerramientas()">Herramientas</a> 
+  <a class="text-sm font-medium text-gray-600 hover:text-[#F4A261] transition-colors cursor-pointer" onclick="mostrarSoloEsenciales()">Esenciales</a> 
+</nav>
 
     <button id="modoInfanciaBtn" class="btn-gradient px-6 py-2.5 rounded-full text-sm font-semibold">
-      Modo Infancia
-    </button>
+  Modo Infancia
+</button>
   </div>
 </header>
 
-<main>
+<main id="contenedor-principal">
   <section id="inicio" class="bubbles pt-48 pb-32 relative">
     <div class="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-16 items-center relative z-10">
       <div class="space-y-8">
@@ -119,15 +186,16 @@
             Crea tu propia experiencia
           </button>
   
-        <a href="#manifiesto" class="bg-white/80 backdrop-blur text-[#264653] px-8 py-4 rounded-full text-base font-semibold border border-gray-200 hover:bg-white transition-all inline-block">
+      <a href="javascript:void(0)" onclick="mostrarSoloManifiesto()" class="bg-white/80 backdrop-blur text-[#264653] px-8 py-4 rounded-full text-base font-semibold border border-gray-200 hover:bg-white transition-all inline-block">
   Ver manifiesto
-</a> 
+</a>
+
         </div>
       </div>
 
       <div class="relative flex justify-center">
         <div class="bg-white/90 backdrop-blur-sm rounded-[3.5rem] p-3 aspect-square flex items-center justify-center shadow-2xl border border-white overflow-hidden max-w-[500px] w-full">
-          <img id="imagenHero" src="https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?q=80&w=1000&auto=format&fit=crop" alt="Familia feliz" class="w-full h-full object-cover rounded-[3rem] transition-all duration-700" />
+         <img id="imagenHero" src="https://www.aepd.es/sites/default/files/2022-11/mas-que-un-movil-familia.jpeg" alt="Familia feliz" class="w-full h-full object-cover rounded-[3rem] transition-all duration-700" /> 
         </div>
       </div>
     </div>
@@ -139,16 +207,20 @@
     </svg>
   </div>
 
-  <section class="bg-[#FAFAFA] py-24 relative overflow-hidden">
-    <div class="max-w-[900px] mx-auto px-6 text-center">
-      <h2 class="serif-title text-4xl md:text-5xl font-semibold mb-6 text-[#264653] leading-snug">Construyendo un futuro verdaderamente conectado a la realidad</h2>
-      <p class="text-xl text-gray-500 mb-12 font-light leading-relaxed">Promovemos un ecosistema donde la curiosidad natural del niño florezca a través del juego, la comunicación y la conexión humana profunda.</p>
-      <button id="abrirProposito" class="text-[#8B5CF6] border-b-2 border-[#8B5CF6] pb-1 font-bold tracking-wide hover:text-[#264653] transition-colors">
-  NUESTRO PROPÓSITO
-</button>
-    </div>
+  <section id="seccion-frase-proposito" class="bg-[#FAFAFA] py-24 relative overflow-hidden" style="display: none;"> 
+  <div class="max-w-[900px] mx-auto px-6 text-center">
+    <h2 class="serif-title text-4xl md:text-5xl font-semibold mb-6 text-[#264653] leading-snug">
+      Construyendo un futuro donde realmente conectemos con la realidad
+    </h2>
+    <p class="text-xl text-gray-500 mb-12 font-light leading-relaxed">
+      Promovemos un ecosistema donde la curiosidad natural del niño florezca a través del juego, la comunicación y la conexión humana profunda.
+    </p>
+    <button id="abrirProposito" class="text-[#8B5CF6] border-b-2 border-[#8B5CF6] pb-1 font-bold tracking-wide hover:text-[#264653] transition-colors">
+      NUESTRO PROPÓSITO
+    </button>
+  </div>
+</section>
 
-  </section>
   <section id="propositoSection"
   class="hidden py-32 relative overflow-hidden">
   <!-- Fondo dividido horizontal formal -->
@@ -210,71 +282,63 @@
 
 </section>
 
-  <section class="py-24 bg-white" id="por-que">
-    <div class="max-w-[1200px] mx-auto px-6">
-      <div class="grid md:grid-cols-12 gap-16 items-start">
-        <div class="md:col-span-5 space-y-6">
-          <h2 class="serif-title text-4xl font-semibold text-[#264653]">La importancia de la desconexión selectiva</h2>
-          <p class="text-gray-500 text-lg leading-relaxed">El desarrollo infantil requiere estímulos sensoriales variados que las pantallas no pueden replicar. Volver a lo esencial es un acto de cuidado.</p>
-          <div class="flex items-center gap-4 py-4">
-            <div class="h-[1px] w-12 bg-[#F4A261]"></div>
-            <span class="text-xs uppercase tracking-[0.2em] font-bold text-[#F4A261]">Conoce la evidencia detrás de este enfoque</span>
-          </div>
-          <div class="mt-6 max-w-xl">
-  <p class="text-sm text-gray-500 mb-4">
-    Si deseas profundizar en este tema, mira el siguiente video:
-  </p>
-
-  <div class="aspect-video rounded-2xl overflow-hidden shadow-lg">
-    <iframe 
-      class="w-full h-full"
-      src="https://www.youtube.com/embed/Yc-1BOcNtc0"
-      title="YouTube video player"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen>
-    </iframe>
-  </div>
-</div>
+  <section id="pilares-rekrea" class="py-24 bg-white" style="display: none;">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <div class="grid md:grid-cols-12 gap-16 items-start">
+      
+      <div class="md:col-span-5 space-y-6">
+        <h2 class="serif-title text-4xl font-semibold text-[#264653]">La importancia de la desconexión selectiva</h2>
+        <p class="text-gray-500 text-lg leading-relaxed">El desarrollo infantil requiere estímulos sensoriales variados que las pantallas no pueden replicar. Volver a lo esencial es un acto de cuidado.</p>
+        
+        <div class="flex items-center gap-4 py-4">
+          <div class="h-[1px] w-12 bg-[#F4A261]"></div>
+          <span class="text-xs uppercase tracking-[0.2em] font-bold text-[#F4A261]">Conoce la evidencia detrás de este enfoque</span>
         </div>
-        <div class="md:col-span-7 grid sm:grid-cols-2 gap-8">
-          <div class="p-8 bg-white border border-[#06D6A0]/50 rounded-2xl shadow-md hover:shadow-[0_0_60px_rgba(6,214,160,0.8)] hover:border-[#06D6A0] hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 group">
-            <span class="material-symbols-outlined text-[#06D6A0] text-4xl mb-6">psychology_alt</span>
-            <h3 class="text-xl font-bold mb-3">Plasticidad Cerebral</h3>
-            <p class="text-sm text-gray-500">El juego libre fomenta nuevas conexiones neuronales y la capacidad de asombro.</p>
+
+        <div class="mt-6 max-w-xl">
+          <p class="text-sm text-gray-500 mb-4">Si deseas profundizar en este tema, mira el siguiente video:</p>
+          <div class="aspect-video rounded-2xl overflow-hidden shadow-lg">
+            <iframe class="w-full h-full" src="https://www.youtube.com/embed/Yc-1BOcNtc0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
-          <div class="p-8 bg-white border border-[#FFD166]/50 rounded-2xl shadow-md hover:shadow-[0_0_60px_rgba(255,209,102,0.85)] hover:border-[#FFD166] hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 group">
-            <span class="material-symbols-outlined text-[#FFD166] text-4xl mb-6">groups</span>
-            <h3 class="text-xl font-bold mb-3">Cohesión Familiar</h3>
-            <p class="text-sm text-gray-500">Espacios de atención plena donde el vínculo es el único protagonista.</p>
-          </div>
-         <div class="p-8 bg-white border border-[#8ECAE6]/50 rounded-2xl shadow-md 
-hover:shadow-[0_0_60px_rgba(142,202,230,0.85)] 
-hover:border-[#8ECAE6] hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 group">
-  
-  <span class="material-symbols-outlined text-[#8ECAE6] text-4xl mb-6">self_improvement</span>
-  <h3 class="text-xl font-bold mb-3">Salud Emocional</h3>
-  <p class="text-sm text-gray-500">Mitigamos la sobreestimulación digital, reduciendo la ansiedad y el estrés.</p>
-</div>
-          <div class="p-8 bg-white border border-[#F4A261]/50 rounded-2xl shadow-md hover:shadow-[0_0_60px_rgba(244,162,97,0.85)] hover:border-[#F4A261] hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 group">
-  <span class="material-symbols-outlined text-[#F4A261] text-4xl mb-6">fitness_center</span>
-  <h3 class="text-xl font-bold mb-3">Vitalidad Física</h3>
-  <p class="text-sm text-gray-500">Recuperamos el movimiento como lenguaje natural de exploración del mundo.</p>
-</div>
         </div>
       </div>
+
+      <div class="md:col-span-7 grid sm:grid-cols-2 gap-8">
+        <div class="p-8 bg-white border border-[#06D6A0]/50 rounded-2xl shadow-md hover:shadow-[0_0_60px_rgba(6,214,160,0.8)] transition-all duration-300">
+          <span class="material-symbols-outlined text-[#06D6A0] text-4xl mb-6">psychology_alt</span>
+          <h3 class="text-xl font-bold mb-3">Plasticidad Cerebral</h3>
+          <p class="text-sm text-gray-500">El juego libre fomenta nuevas conexiones neuronales y la capacidad de asombro.</p>
+        </div>
+        <div class="p-8 bg-white border border-[#FFD166]/50 rounded-2xl shadow-md hover:shadow-[0_0_60px_rgba(255,209,102,0.85)] transition-all duration-300">
+          <span class="material-symbols-outlined text-[#FFD166] text-4xl mb-6">groups</span>
+          <h3 class="text-xl font-bold mb-3">Cohesión Familiar</h3>
+          <p class="text-sm text-gray-500">Espacios de atención plena donde el vínculo es el único protagonista.</p>
+        </div>
+        <div class="p-8 bg-white border border-[#8ECAE6]/50 rounded-2xl shadow-md hover:shadow-[0_0_60px_rgba(142,202,230,0.85)] transition-all duration-300">
+          <span class="material-symbols-outlined text-[#8ECAE6] text-4xl mb-6">self_improvement</span>
+          <h3 class="text-xl font-bold mb-3">Salud Emocional</h3>
+          <p class="text-sm text-gray-500">Mitigamos la sobreestimulación digital, reduciendo la ansiedad y el estrés.</p>
+        </div>
+        <div class="p-8 bg-white border border-[#F4A261]/50 rounded-2xl shadow-md hover:shadow-[0_0_60px_rgba(244,162,97,0.85)] transition-all duration-300">
+          <span class="material-symbols-outlined text-[#F4A261] text-4xl mb-6">fitness_center</span>
+          <h3 class="text-xl font-bold mb-3">Vitalidad Física</h3>
+          <p class="text-sm text-gray-500">Recuperamos el movimiento como lenguaje natural de exploración del mundo.</p>
+        </div>
+      </div>
+
     </div>
   </div>
-</div>
-  </section>
+</section>
 
-  <section class="bg-[#FFFDF5] py-24" id="herramientas">
+<section class="bg-[#FFFDF5] py-24" id="herramientas" style="display: none;"> 
     <div class="max-w-[1200px] mx-auto px-6">
       <div class="mb-16 text-center">
         <h2 class="serif-title text-4xl font-semibold mb-4">Caja de Herramientas</h2>
         <p class="text-gray-500 font-light max-w-xl mx-auto">Recursos diseñados por expertos para facilitar la transición hacia una rutina familiar más presente.</p>
       </div>
+      
       <div class="grid md:grid-cols-3 gap-10">
+        
         <div class="bg-white p-2 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all group">
           <div class="aspect-[4/3] bg-[#FFD166]/10 rounded-2xl flex items-center justify-center mb-6 overflow-hidden">
             <span class="material-symbols-outlined text-6xl text-[#FFD166]/60 group-hover:scale-110 transition-transform">menu_book</span>
@@ -282,9 +346,10 @@ hover:border-[#8ECAE6] hover:-translate-y-1 hover:scale-[1.02] transition-all du
           <div class="px-6 pb-6">
             <h3 class="text-xl font-bold mb-2">Guía de Desconexión</h3>
             <p class="text-sm text-gray-500 mb-6">Estrategias prácticas para reducir el uso de dispositivos en casa.</p>
-            <a class="text-[#F4A261] text-sm font-bold flex items-center gap-2" href="#">DESCARGAR PDF <span class="material-symbols-outlined text-lg">download</span></a>
+            <a class="text-[#F4A261] text-sm font-bold flex items-center gap-2" href="https://www.unicef.org/panama/media/4386/file/Pantallas%20en%20Casa.pdf" target="_blank" download="Guia_Rekrea_Pantallas_en_Casa.pdf">DESCARGAR PDF <span class="material-symbols-outlined text-lg">download</span></a>   
           </div>
         </div>
+
         <div class="bg-white p-2 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all group">
           <div class="aspect-[4/3] bg-[#06D6A0]/10 rounded-2xl flex items-center justify-center mb-6 overflow-hidden">
             <span class="material-symbols-outlined text-6xl text-[#06D6A0]/60 group-hover:scale-110 transition-transform">draw</span>
@@ -292,24 +357,32 @@ hover:border-[#8ECAE6] hover:-translate-y-1 hover:scale-[1.02] transition-all du
           <div class="px-6 pb-6">
             <h3 class="text-xl font-bold mb-2">100 Ideas de Juego</h3>
             <p class="text-sm text-gray-500 mb-6">Un catálogo de actividades sin pantallas para todas las edades.</p>
-            <a class="text-[#06D6A0] text-sm font-bold flex items-center gap-2" href="#">EXPLORAR IDEAS <span class="material-symbols-outlined text-lg">arrow_forward</span></a>
+            <a class="text-[#06D6A0] text-sm font-bold flex items-center gap-2" 
+               href="https://static1.squarespace.com/static/611a88fb90c48074b99a267a/t/68eb9cdaf5608a4a275aaff1/1760271578067/2025+100+screen+free+activities+for+kids+boredom+busters+SPAN+Tech+Tip+4.pdf" 
+               target="_blank" 
+               download="Rekrea_100_Ideas_Juego.pdf">
+               EXPLORAR IDEAS <span class="material-symbols-outlined text-lg">arrow_forward</span>
+            </a>
           </div>
         </div>
+
         <div class="bg-white p-2 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all group">
           <div class="aspect-[4/3] bg-[#E63946]/10 rounded-2xl flex items-center justify-center mb-6 overflow-hidden">
             <span class="material-symbols-outlined text-6xl text-[#E63946]/60 group-hover:scale-110 transition-transform">calendar_today</span>
           </div>
           <div class="px-6 pb-6">
-            <h3 class="text-xl font-bold mb-2">Planificador Semanal</h3>
-            <p class="text-sm text-gray-500 mb-6">Organiza momentos de conexión de calidad en tu vida diaria.</p>
-            <a class="text-[#E63946] text-sm font-bold flex items-center gap-2" href="#">CREAR PLAN <span class="material-symbols-outlined text-lg">edit_calendar</span></a>
-          </div>
+  <h3 class="text-xl font-bold mb-2">Planificador Semanal</h3>
+  <p class="text-sm text-gray-500 mb-6">Organiza momentos de conexión de calidad en tu vida diaria.</p>
+  
+  <button onclick="abrirPlanificador()" class="text-[#E63946] text-sm font-bold flex items-center gap-2 hover:translate-x-1 transition-transform">
+    CREAR PLAN <span class="material-symbols-outlined text-lg">edit_calendar</span>
+  </button>
+</div>
         </div>
-      </div>
-    </div>
-  </section>
 
-<section id="manifiesto" class="relative h-screen flex items-center justify-center text-center overflow-hidden">
+      </div> </div> </section>
+  
+<section id="manifiesto" class="relative h-screen flex items-center justify-center text-center overflow-hidden" style="display: none;">
 
   <!-- GIF DE FONDO -->
   <div class="absolute inset-0">
@@ -356,88 +429,160 @@ hover:border-[#8ECAE6] hover:-translate-y-1 hover:scale-[1.02] transition-all du
 
 </section> 
 
-  <section class="max-w-[1200px] mx-auto px-6 py-24">
+<section id="cta-final" class="max-w-[1200px] mx-auto px-6 py-24" style="display: block;">
     <div class="relative bg-[#264653] rounded-[2rem] p-12 md:p-24 text-center text-white overflow-hidden shadow-2xl">
       <div class="absolute inset-0 opacity-10 pointer-events-none">
         <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
           <circle cx="90" cy="10" fill="white" r="15"></circle>
         </svg>
       </div>
+
       <div class="relative z-10 space-y-8">
-        <h2 class="serif-title text-4xl md:text-6xl font-semibold max-w-3xl mx-auto leading-tight">¿Listo para transformar el presente de tus hijos?</h2>
-        <p class="text-lg text-white/70 max-w-xl mx-auto font-light">Únete a nuestra comunidad y recibe recursos semanales para cultivar una infancia plena.</p>
-        <div class="flex items-center justify-center pt-4">
-  <button class="bg-[#F4A261] text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-[#F4A261]/90 shadow-xl shadow-[#F4A261]/20">
-    Activar Modo Infancia
-  </button>
-</div>
+        <div id="contenedor-texto-cta">
+          <h2 class="serif-title text-4xl md:text-6xl font-semibold max-w-3xl mx-auto leading-tight">¿Listo para transformar el presente de tus hijos?</h2>
+          <p class="text-lg text-white/70 max-w-xl mx-auto font-light mb-8">Únete a nuestra comunidad y recibe recursos semanales para cultivar una infancia plena.</p>
+        </div>
+
+        <div class="flex flex-col items-center justify-center pt-4">
+          <button id="btn-pre-activar" onclick="mostrarInputCorreo()" class="bg-[#F4A261] text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-[#F4A261]/90 shadow-xl shadow-[#F4A261]/20 transition-all">
+            Activar Modo Infancia
+          </button>
+
+          <div id="form-correo" class="hidden flex-col md:flex-row gap-3 w-full max-w-md">
+            <input type="email" id="input-correo" placeholder="Tu correo electrónico..." class="flex-1 px-6 py-4 rounded-full text-gray-800 outline-none focus:ring-4 focus:ring-[#F4A261]">
+            <button onclick="finalizarActivacion()" class="bg-[#06D6A0] text-white px-8 py-4 rounded-full font-bold hover:bg-[#05b386] transition-all">
+              ¡LISTO!
+            </button>
+          </div>
+
+          <div id="mensaje-exito" class="hidden space-y-4 animate-bounce">
+            <h3 class="text-3xl md:text-4xl font-bold text-yellow-300">¡Prepárate! 🎉</h3>
+            <p class="text-lg text-white">Infórmate en redes sociales sobre nuestros eventos y recursos indispensables para ti.</p>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
+  </section> 
 </main>
 
-<footer class="bg-white pt-24 pb-12 border-t border-gray-100">
-  <div class="max-w-[1200px] mx-auto px-6">
-    <div class="grid md:grid-cols-4 gap-12 mb-16">
-      <div class="col-span-2 space-y-6">
-        <div class="flex items-center gap-2">
-         <h2 id="logoFooter" class="text-3xl text-[#264653] transition-colors duration-500">Rekrea</h2>
-        </div>
-        <p class="text-gray-500 max-w-sm font-light leading-relaxed">No es una prohibición a la tecnología, es una reconciliación con la vida real.</p>
-      </div>
-      <div>
-        <h4 class="font-bold text-[#264653] mb-6">Iniciativa</h4>
-        <ul class="space-y-4 text-sm text-gray-500 font-medium">
-          <li><a class="hover:text-[#F4A261]" href="#">Manifiesto</a></li>
-          <li><a class="hover:text-[#F4A261]" href="#">Expertos</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-bold text-[#264653] mb-6">Soporte</h4>
-        <ul class="space-y-4 text-sm text-gray-500 font-medium">
-          <li><a class="hover:text-[#F4A261]" href="#">Recursos</a></li>
-          <li><a class="hover:text-[#F4A261]" href="#">Contacto</a></li>
-        </ul>
-      </div>
+<section id="contacto-ayuda" class="max-w-[1200px] mx-auto px-6 py-24 hidden">
+  <div class="bg-red-50 rounded-[2rem] p-8 md:p-16 border-2 border-red-200">
+    <div class="text-center mb-12">
+      <h2 class="serif-title text-3xl md:text-5xl text-red-600 mb-4">¿Necesitas ayuda urgente?</h2>
+      <p class="text-gray-700 text-lg">Recuerda que siempre existirá quien te apoye. No estás solo.</p>
     </div>
-    <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
-      <p class="text-xs text-gray-400 font-medium">© 2025 Rekrea. Construyendo infancias presentes.</p>
-      <p class="text-sm text-[#F4A261] font-serif italic">"El mejor regalo es tu presencia."</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="space-y-6">
+        <h3 class="font-bold text-xl uppercase tracking-widest text-red-500 border-b pb-2">Líneas de Emergencia</h3>
+        <div class="space-y-4">
+          <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm">
+            <span class="text-3xl">🚨</span>
+            <div>
+              <p class="font-bold text-gray-800">Emergencia General / Policía / Bomberos</p>
+              <a href="tel:911" class="text-2xl font-black text-red-600">9-1-1</a>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm">
+            <span class="text-3xl">🏠</span>
+            <div>
+              <p class="font-bold text-gray-800">Accidentes en Casa / Cruz Roja</p>
+              <a href="tel:065" class="text-2xl font-black text-red-600">065</a>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm">
+            <span class="text-3xl">💜</span>
+            <div>
+              <p class="font-bold text-gray-800">Agresión Física / Violencia Familiar</p>
+              <a href="tel:8000123456" class="text-2xl font-black text-red-600">800 012 3456</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <h3 class="font-bold text-xl uppercase tracking-widest text-orange-500 border-b pb-2">Contacto Rekrea</h3>
+        <div class="bg-white p-6 rounded-2xl shadow-sm space-y-4">
+          <p class="text-gray-600">Para dudas, sesiones personalizadas o simplemente platicar, escríbenos:</p>
+         <a href="https://www.instagram.com/rekrea.mx/" target="_blank" class="flex items-center justify-center gap-3 bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] text-white py-3 rounded-xl font-bold hover:scale-105 transition-transform shadow-lg">
+  <i class="fa-brands fa-instagram text-xl"></i>
+  <span>Instagram Rekrea</span>
+</a>  
+          <div class="bg-orange-50 p-4 rounded-xl border-l-4 border-orange-400">
+            <p class="text-sm italic text-orange-800">"Si buscas recursos gratuitos del gobierno o apoyo de instituciones como Capullos, ingresa a <strong>Activar Modo Infancia</strong> para recibir la guía completa."</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</footer>
+</section>
+
+<footer class="bg-white py-12 border-t border-gray-100">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <div class="grid md:grid-cols-4 gap-12 mb-12">
+      <div class="col-span-2">
+        <h2 class="text-2xl font-bold mb-4 text-[#264653]">Rekrea</h2>
+        <p class="text-gray-500 max-w-sm">No es una prohibición a la tecnología, es una reconciliación con la vida real.</p>
+      </div>
+      
+      <div class="flex flex-col gap-4">
+        <h4 class="font-bold text-gray-800">Iniciativa</h4>
+        <a href="javascript:void(0)" onclick="mostrarSoloManifiesto()" class="text-gray-500 hover:text-[#F4A261] transition-colors">Manifiesto</a>
+        <a href="javascript:void(0)" onclick="mostrarSoloFraseProposito()" class="text-gray-500 hover:text-[#F4A261] transition-colors">Nuestro Propósito</a>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <h4 class="font-bold text-gray-800">Soporte</h4>
+        <a href="javascript:void(0)" onclick="mostrarSoloHerramientas()" class="text-gray-500 hover:text-[#F4A261] transition-colors">Recursos</a>
+        <a href="javascript:void(0)" onclick="mostrarSoloContacto()" class="text-gray-500 hover:text-[#F4A261] transition-colors">Contacto</a>
+        
+        <div class="flex gap-4 mt-2">
+          <a href="https://www.instagram.com/rekrea.mx/" target="_blank" class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-md" title="Síguenos en Instagram">
+            <i class="fa-brands fa-instagram text-xl"></i>
+          </a>
+          
+          <a href="https://www.tiktok.com/@rekrea.mx" target="_blank" class="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white hover:scale-110 transition-transform shadow-md" title="Síguenos en TikTok">
+            <i class="fa-brands fa-tiktok text-lg"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pt-8 border-t border-gray-50 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-xs text-gray-400">© 2026 Rekrea. Construyendo infancias presentes.</p>
+      <p class="text-sm italic text-[#F4A261] font-serif">"El mejor regalo es tu presencia."</p>
+    </div>
+  </div>
+</footer> 
 
 <script>
+
 const modoBtn = document.getElementById("modoInfanciaBtn");
 let modoActivo = false;
 
 modoBtn.addEventListener("click", function() {
-
   const logoHeader = document.getElementById("logoHeader");
-  const logoFooter = document.getElementById("logoFooter");
   const imagen = document.getElementById("imagenHero");
 
   modoActivo = !modoActivo;
 
   if (modoActivo) {
-
-    // ACTIVAR ESTILO
+    // 1. ACTIVAR ESTILO (Botón presionado)
     modoBtn.classList.add("activo");
 
-    // Cambio de logo
+    // 2. CAMBIO DE LOGO A MORADO
     logoHeader.style.transition = "color 0.6s ease";
-    logoFooter.style.transition = "color 0.6s ease";
     logoHeader.style.color = "#4b1c71";
-    logoFooter.style.color = "#4b1c71";
 
-    // Cambio de imagen
+    // 3. CAMBIO DE IMAGEN (De familia con pantallas a niña feliz)
     imagen.style.opacity = "0";
     setTimeout(() => {
+      // Imagen de la niña
       imagen.src = "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?q=80&w=1000&auto=format&fit=crop";
       imagen.style.opacity = "1";
     }, 400);
 
-    // CONFETI SOLO CUANDO SE ACTIVA
+    // 4. ¡CONFETI!
     confetti({
       particleCount: 200,
       spread: 140,
@@ -445,24 +590,21 @@ modoBtn.addEventListener("click", function() {
     });
 
   } else {
-
-    // DESACTIVAR ESTILO
+    // 5. REGRESAR TODO A LA NORMALIDAD
     modoBtn.classList.remove("activo");
 
-    // Regresar logo a naranja
-    logoHeader.style.color = "#FF7A00";
-    logoFooter.style.color = "#FF7A00";
+    // Logo vuelve a su color original
+    logoHeader.style.color = "#264653";
 
-    // Regresar imagen original
+    // Imagen vuelve a la familia con pantallas
     imagen.style.opacity = "0";
     setTimeout(() => {
-      imagen.src = "https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?q=80&w=1000&auto=format&fit=crop";
+      imagen.src = "https://www.aepd.es/sites/default/files/2022-11/mas-que-un-movil-familia.jpeg";
       imagen.style.opacity = "1";
     }, 400);
-
   }
-
 });
+
 </script>
  
 <script>
@@ -519,7 +661,17 @@ function mostrarResultado() {
       estres: "Deja el celular, respira profundo y toma una ducha caliente.",
       conectar: "Realiza estiramientos. El movimiento regula emociones, liberando tensión muscular acumulada, generando una sensación de alivio.",
       calidad: "Envía un mensaje a alguien importante. Mándalo.",
-      creatividad: "Top películas creativas - con mensaje especial ;) : Soul, En busca de la felicidad, Whiplash, Dead Poets Society, Inside Out."
+creatividad: `
+  <div class="text-left space-y-4">
+    <p class="text-sm font-medium text-gray-500 uppercase tracking-widest text-center">🎬 Maratón de Inspiración</p>
+    <div class="grid grid-cols-1 gap-2 text-sm">
+      <div class="bg-orange-50 p-2 rounded-lg border-l-4 border-orange-400"><strong>Soul & Inside Out:</strong> Para entender tus emociones.</div>
+      <div class="bg-blue-50 p-2 rounded-lg border-l-4 border-blue-400"><strong>Spider-Verse:</strong> Arte y estilo visual único.</div>
+      <div class="bg-purple-50 p-2 rounded-lg border-l-4 border-purple-400"><strong>Tick, Tick... Boom!:</strong> Sobre el tiempo y los sueños.</div>
+    </div>
+    <p class="text-xs italic text-gray-400 text-center mt-2">Apaga el cel, prepara palomitas y ¡disfruta!</p>
+  </div>
+` 
     },
     familia: {
       calidad: "Cena sin pantallas con una pregunta significativa. Todos juntos cuenten su día",
@@ -535,8 +687,7 @@ function mostrarResultado() {
     }
   };
 
-  document.getElementById("resultadoTexto").innerText =
-    mensajes[publico][objetivo] || "Regálate este momento presente.";
+  document.getElementById("resultadoTexto").innerHTML = mensajes[publico][objetivo] || "Regálate este momento presente.";
 }
 
 function resetear() {
@@ -558,24 +709,335 @@ function cerrarModalCompleto() {
   objetivo = "";
 }
 
-// ABRIR PROPÓSITO
+// ABRIR PROPÓSITO (El botón morado con línea)
 const abrirProposito = document.getElementById("abrirProposito");
 const propositoSection = document.getElementById("propositoSection");
 
 abrirProposito.addEventListener("click", function() {
+  // 1. Forzamos que la sección de las tarjetas sea visible
   propositoSection.classList.remove("hidden");
+  propositoSection.style.display = 'block'; // Aseguramos que no tenga display: none
+  
+  // 2. Quitamos el min-height a la sección de la frase para que el contenido fluya hacia abajo
+  const seccionFrase = document.getElementById('seccion-frase-proposito');
+  if(seccionFrase) {
+    seccionFrase.style.minHeight = 'auto';
+    seccionFrase.style.paddingTop = '100px';
+  }
+
+  // 3. Scroll suave hacia las tarjetas
   propositoSection.scrollIntoView({ behavior: "smooth" });
 
+  // 4. Disparamos la transición de las tarjetas (los óvalos/rectángulos)
   const cards = document.querySelectorAll(".proposito-card");
-
   cards.forEach((card, index) => {
     setTimeout(() => {
       card.classList.remove("opacity-0");
       card.classList.remove("translate-y-10");
     }, index * 200);
   });
-
 });
+
+</script>
+<script>
+
+function mostrarSoloManifiesto() {
+  const main = document.getElementById('contenedor-principal');
+  const manifiesto = document.getElementById('manifiesto');
+  
+  // 1. Ocultamos las demás secciones para que solo quede el manifiesto
+  Array.from(main.children).forEach(child => {
+    child.style.display = 'none';
+  });
+
+  // 2. Mostramos el manifiesto y ajustamos espacio arriba
+  manifiesto.style.display = 'flex';
+  manifiesto.style.paddingTop = '100px'; 
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // 3. El logo simplemente servirá para resetear la página si lo desean
+  const logo = document.getElementById('logoHeader');
+  logo.style.cursor = 'pointer';
+  logo.setAttribute('onclick', 'location.reload()');
+}
+
+function mostrarSoloFraseProposito() {
+  const main = document.getElementById('contenedor-principal');
+  const seccionFrase = document.getElementById('seccion-frase-proposito');
+  const seccionTarjetas = document.getElementById('propositoSection');
+  
+  // Ocultamos todo
+  Array.from(main.children).forEach(child => {
+    child.style.display = 'none';
+  });
+
+  // Mostramos la frase centrada
+  seccionFrase.style.setProperty('display', 'flex', 'important');
+  seccionFrase.style.flexDirection = 'column';
+  seccionFrase.style.alignItems = 'center';
+  seccionFrase.style.justifyContent = 'center';
+  seccionFrase.style.minHeight = '100vh'; 
+  
+  // IMPORTANTE: Mantenemos oculta la sección de tarjetas hasta que piquen el botón morado
+  if(seccionTarjetas) {
+    seccionTarjetas.classList.add("hidden");
+    // Reseteamos la animación de las tarjetas por si ya se habían visto
+    const cards = document.querySelectorAll(".proposito-card");
+    cards.forEach(card => {
+        card.classList.add("opacity-0", "translate-y-10");
+    });
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+  const logo = document.getElementById('logoHeader');
+  logo.setAttribute('onclick', 'location.reload()');
+}
+
+function mostrarSoloEsenciales() {
+  const main = document.getElementById('contenedor-principal');
+  const seccionEsenciales = document.getElementById('pilares-rekrea');
+  
+  // 1. Ocultamos absolutamente todo lo que esté dentro de main
+  Array.from(main.children).forEach(child => {
+    child.style.display = 'none';
+  });
+
+  // 2. Mostramos solo la sección de Esenciales (video y cuadros)
+  seccionEsenciales.style.display = 'block';
+  seccionEsenciales.style.minHeight = '100vh';
+  seccionEsenciales.style.paddingTop = '120px'; // Para que el menú no tape el título
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // 3. Configuramos el logo para resetear
+  const logo = document.getElementById('logoHeader');
+  logo.setAttribute('onclick', 'location.reload()');
+}
+
+function mostrarSoloHerramientas() {
+  const main = document.getElementById('contenedor-principal');
+  const seccionHerramientas = document.getElementById('herramientas');
+  
+  // 1. Ocultamos todas las secciones del contenedor principal
+  Array.from(main.children).forEach(child => {
+    child.style.display = 'none';
+  });
+
+  // 2. Mostramos solo la Caja de Herramientas
+  seccionHerramientas.style.display = 'block';
+  seccionHerramientas.style.minHeight = '100vh';
+  seccionHerramientas.style.paddingTop = '140px'; // Espacio para que el menú no tape el título
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // 3. Configuramos el logo para que al picarle resetee la página
+  const logo = document.getElementById('logoHeader');
+  logo.setAttribute('onclick', 'location.reload()');
+}
+
+// --- VARIABLES GLOBALES ---
+const planModal = document.getElementById("planificadorModal");
+const p1 = document.getElementById("plan-paso1");
+const p2 = document.getElementById("plan-paso2");
+const p3 = document.getElementById("plan-paso3");
+
+const actividadesSugeridas = [
+  "Organizar una pelea de pistolas de agua",
+  "Carrera de tres pies o lanzar huevos",
+  "Recolectar comida para donación",
+  "Limpiar un parque por 20 minutos",
+  "Construir un castillo de arena",
+  "Hacer una fiesta de paletas con vecinos",
+  "Observar aves en el parque",
+  "Paseo en bicicleta en familia",
+  "Volar un papalote (cometa)",
+  "Plantar una semilla de girasol"
+];
+
+// --- FUNCIONES DE NAVEGACIÓN ---
+function mostrarSoloEsenciales() {
+  const main = document.getElementById('contenedor-principal');
+  const seccionEsenciales = document.getElementById('pilares-rekrea');
+  Array.from(main.children).forEach(child => child.style.display = 'none');
+  seccionEsenciales.style.display = 'block';
+  seccionEsenciales.style.minHeight = '100vh';
+  seccionEsenciales.style.paddingTop = '120px';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById('logoHeader').setAttribute('onclick', 'location.reload()');
+}
+
+function mostrarSoloHerramientas() {
+  const main = document.getElementById('contenedor-principal');
+  const seccionHerramientas = document.getElementById('herramientas');
+  Array.from(main.children).forEach(child => child.style.display = 'none');
+  seccionHerramientas.style.display = 'block';
+  seccionHerramientas.style.minHeight = '100vh';
+  seccionHerramientas.style.paddingTop = '140px';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById('logoHeader').setAttribute('onclick', 'location.reload()');
+}
+
+// --- LÓGICA DEL PLANIFICADOR ---
+function abrirPlanificador() {
+  planModal.classList.remove("hidden");
+  generarCalendario();
+}
+
+function cerrarPlanModal() {
+  planModal.classList.add("hidden");
+  p1.classList.remove("hidden");
+  p2.classList.add("hidden");
+  p3.classList.add("hidden");
+}
+
+// Asignar cierre de modal
+if(document.getElementById("cerrarPlanificador")) {
+  document.getElementById("cerrarPlanificador").onclick = cerrarPlanModal;
+}
+
+function generarCalendario() {
+  const grid = document.getElementById("calendarioGrid");
+  if(!grid) return;
+  grid.innerHTML = "";
+  for (let i = 1; i <= 31; i++) {
+    const dia = document.createElement("div");
+    dia.className = `py-3 rounded-xl border border-gray-50 hover:bg-[#F4A261]/20 cursor-pointer transition-all ${i === 3 ? 'bg-[#F4A261] text-white shadow-lg' : ''}`;
+    dia.innerText = i;
+    dia.onclick = () => seleccionarDia(i);
+    grid.appendChild(dia);
+  }
+}
+
+function seleccionarDia(dia) {
+  window.diaSeleccionado = dia;
+  p1.classList.add("hidden");
+  p2.classList.remove("hidden");
+  
+  const lista = document.getElementById("listaActividades");
+  if(!lista) return;
+  lista.innerHTML = "";
+  
+  // 1. Cargar sugerencias
+  actividadesSugeridas.forEach(act => {
+    const btn = document.createElement("button");
+    btn.className = "text-left p-4 rounded-2xl border border-gray-100 hover:border-[#F4A261] hover:bg-orange-50 transition-all text-sm";
+    btn.innerText = act;
+    btn.onclick = () => confirmarPlan(act);
+    lista.appendChild(btn);
+  });
+
+  // 2. Insertar el cuadro de "Otro plan"
+  const divOtra = document.createElement("div");
+  divOtra.className = "col-span-full mt-4 p-4 border-2 border-dashed border-gray-200 rounded-2xl";
+  divOtra.innerHTML = `
+    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-2">¿Tienes otro plan en mente?</label>
+    <div class="flex gap-2">
+      <input type="text" id="inputOtraActividad" placeholder="Escribe tu actividad..." 
+             class="flex-1 bg-transparent outline-none text-sm italic text-gray-700">
+      <button type="button" id="btnClickAnadir"
+              class="bg-[#F4A261] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-[#e76f51] transition-colors">
+        AÑADIR
+      </button>
+    </div>
+  `;
+  lista.appendChild(divOtra);
+
+  // 3. EVENTO DEL BOTÓN (Aquí es donde se arregla)
+  document.getElementById("btnClickAnadir").addEventListener("click", function() {
+    const textoInput = document.getElementById("inputOtraActividad").value;
+    if (textoInput.trim() !== "") {
+      confirmarPlan(textoInput);
+    } else {
+      alert("Por favor, escribe una actividad.");
+    }
+  });
+}
+
+function confirmarPlan(act) {
+  p2.classList.add("hidden");
+  p3.classList.remove("hidden");
+  const resumen = document.getElementById("resumenPlan");
+  if(resumen) {
+    resumen.innerText = `El ${window.diaSeleccionado} de Marzo disfrutarán de: "${act}"`;
+  }
+}
+
+function mostrarInicio() {
+  const main = document.getElementById('contenedor-principal');
+  
+  // 1. Ocultamos TODO
+  Array.from(main.children).forEach(child => {
+    child.style.display = 'none';
+  });
+
+  // 2. Mostramos el Hero (Inicio) y el Cuadro Azul (CTA Final)
+  document.getElementById('inicio').style.display = 'block';
+  document.getElementById('cta-final').style.display = 'block';
+  
+  // 3. Mostramos la curva blanca divisoria (si existe)
+  const divisorSvg = document.querySelector('.rotate-180');
+  if(divisorSvg) divisorSvg.style.display = 'block';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Función para mostrar la sección de Contacto y Ayuda
+function mostrarSoloContacto() {
+  const main = document.getElementById('contenedor-principal');
+  const seccionContacto = document.getElementById('contacto-ayuda');
+  
+  // Ocultamos todo lo demás
+  Array.from(main.children).forEach(child => {
+    child.style.display = 'none';
+  });
+
+  // Mostramos contacto
+  seccionContacto.classList.remove('hidden');
+  seccionContacto.style.display = 'block';
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById('logoHeader').setAttribute('onclick', 'location.reload()');
+}
+
+// Vinculamos los textos del footer (Asegúrate que los IDs coincidan o usa onclick)
+// Busca en tu HTML las etiquetas <a> del footer y agrégales el onclick:
+
+function irAActivarModo() {
+  // Primero mostramos todo por si el usuario estaba en otra sección
+  const secciones = document.querySelectorAll('#contenedor-principal > section, #contenedor-principal > div');
+  secciones.forEach(s => s.style.display = 'block');
+  
+  // Ocultamos las secciones que no deben verse en el inicio (Manifiesto, Frase, Contacto)
+  document.getElementById('manifiesto').style.display = 'none';
+  document.getElementById('seccion-frase-proposito').style.display = 'none';
+  document.getElementById('contacto-ayuda').style.display = 'none';
+
+  // Bajamos al cuadro azul
+  const cta = document.getElementById('cta-final');
+  cta.scrollIntoView({ behavior: 'smooth' });
+
+  // Abrimos el formulario automáticamente
+  mostrarInputCorreo();
+}
+
+function mostrarInputCorreo() {
+  document.getElementById('btn-pre-activar').style.display = 'none';
+  document.getElementById('form-correo').style.display = 'flex';
+}
+
+function finalizarActivacion() {
+  const correo = document.getElementById('input-correo').value;
+  if (correo.includes('@')) {
+    document.getElementById('form-correo').style.display = 'none';
+    document.getElementById('contenedor-texto-cta').style.display = 'none';
+    document.getElementById('mensaje-exito').style.display = 'block';
+    confetti({ particleCount: 200, spread: 100, origin: { y: 0.7 } });
+  } else {
+    alert("Por favor, ingresa un correo válido.");
+  }
+}
+
 
 </script>
 
